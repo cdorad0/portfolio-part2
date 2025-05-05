@@ -9,6 +9,11 @@ execute:
 
 ## Part 1 - Data Load and Cleaning
 
+**NOTE: My previous proposal on working with abalone data counts has changed due to there 
+being no data available for abalones. I will now be working with Bat Star counts from two 
+different sites (beaches) in Monterey and comparing their counts from 2006 to 2019.
+
+
 **1. Load the appropriate R packages for analysis**
 
 ```{r load-packages}
@@ -56,6 +61,16 @@ batstar <- seastar |>
 
 batstar
 ```
+
+
+```{r}
+# Original data saved 
+write.csv(batstar_bwAvg, 
+          "~/Documents/STATS_210_Spring_25/Project/project_part2/batstar.csv", 
+          row.names = FALSE)
+```
+
+
 
 ```{r select-site1}
 batstar_bw <- batstar |>
@@ -130,15 +145,104 @@ write.csv(batstar_bwAvg,
 
 
 
-
 ## Part 2 - Data Visualizations
 
 
-```{r}
-ggplot(bat_star_avg, aes(x = Year, y = AverageAmount)) + 
+**Graphs for Bat Star count at Breakwater**
+
+```{r graph-Breakwater}
+# Graph One
+batstar_bwAvg |> ggplot(aes(x = Year, y = AverageAmount)) + 
   geom_point() + 
-  geom_smooth()
+  geom_smooth(fill = "steelblue") + 
+  labs(x = "Years", 
+       y = "Average Count", 
+       title = "Average Amount of Bat Stars at Breakwater from 2006 to 2019") + 
+  scale_x_continuous(breaks = seq(min(2006), max(2019), by = 1))
+
+# Graph Two
+batstar_bwAvg |> ggplot(aes(x = Year, y = AverageAmount)) + 
+  geom_line(color = "steelblue") + 
+  geom_point() + 
+  labs(x = "Years", 
+       y = "Average Count", 
+       title = "Average Amount of Bat Stars at Breakwater from 2006 to 2019") + 
+  scale_x_continuous(breaks = seq(min(2006), max(2019), by = 1))
+
+# Graph Three
+batstar_bwAvg |> ggplot(aes(x = Year, y = AverageAmount)) + 
+  geom_col(fill = "steelblue") + 
+  labs(x = "Years", 
+       y = "Average Count", 
+       title = "Average Amount of Bat Stars at Breakwater from 2006 to 2019") + 
+  scale_x_continuous(breaks = seq(min(2006), max(2019), by = 1)) + 
+  scale_y_continuous(breaks = seq(min(0), max(100), by = 10))
 ```
+
+
+**Graphs for Bat Star count at MacAbee**
+
+```{r graph-MacAbee}
+# Graph One
+batstar_mbAvg |> ggplot(aes(x = Year, y = AverageAmount)) + 
+  geom_point() + 
+  geom_smooth(fill = "aquamarine4") + 
+  labs(x = "Years", 
+       y = "Average Count", 
+       title = "Average Amount of Bat Stars at MacAbee from 2006 to 2019") + 
+  scale_x_continuous(breaks = seq(min(2006), max(2019), by = 1))
+
+# Graph Two
+batstar_mbAvg |> ggplot(aes(x = Year, y = AverageAmount)) + 
+  geom_line(color = "aquamarine4") + 
+  geom_point() + 
+  labs(x = "Years", 
+       y = "Average Count", 
+       title = "Average Amount of Bat Stars at MacAbee from 2006 to 2019") + 
+  scale_x_continuous(breaks = seq(min(2006), max(2019), by = 1))
+
+# Graph Three
+batstar_mbAvg |> ggplot(aes(x = Year, y = AverageAmount)) + 
+  geom_col(fill = "aquamarine4") + 
+  labs(x = "Years", 
+       y = "Average Count", 
+       title = "Average Amount of Bat Stars at MacAbee from 2006 to 2019") + 
+  scale_x_continuous(breaks = seq(min(2006), max(2019), by = 1)) + 
+  scale_y_continuous(breaks = seq(min(0), max(100), by = 10))
+```
+
+
+**Graphs for Bat Star count for both sites**
+
+```{r graphs-all}
+# Graph One
+batstar_all |> ggplot(aes(x = Year, y = AverageAmount, color = Site)) + 
+  geom_line() + 
+  geom_point() + 
+  labs(x = "Years", 
+       y = "Average Count", 
+       title = "Site Comparison for the Average Amount of Bat Stars from 2006 to 2019") + 
+  scale_x_continuous(breaks = seq(min(2006), max(2019), by = 1))
+
+# Graph Two
+batstar_all |> ggplot() + 
+  geom_smooth(mapping = aes(x = Year, y = AverageAmount, color = Site)) +
+  labs(x = "Years", 
+       y = "Average Count", 
+       title = "Site Comparison for the Average Amount of Bat Stars from 2006 to 2019") + 
+  scale_x_continuous(breaks = seq(min(2006), max(2019), by = 1))
+
+# Graph Three
+ggplot(batstar_all, aes(x = Site, y = AverageAmount)) + 
+  geom_boxplot() + 
+  labs(x = "Site", 
+       y = "Average Count", 
+       title = "Site Comparison for the Total Average Amount of Bat Stars")
+```
+
+
+
+
 
 
 
