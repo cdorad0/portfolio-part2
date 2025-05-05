@@ -1,0 +1,145 @@
+---
+title: "Project Part 2: Data Cleaning and Rough Draft"
+author: "Catalina Dorado"
+format: html
+execute: 
+  message: false
+  warning: false
+---
+
+## Part 1 - Data Load and Cleaning
+
+**1. Load the appropriate R packages for analysis**
+
+```{r load-packages}
+# Loading packages
+library(tidyverse)
+library(stringr)
+library(lubridate)
+library(readr)
+```
+
+
+**2. Load the appropriate R packages for analysis**
+
+```{r load-data}
+# Load in the data
+rcca_data <- read_csv("RCCA_invertebrate_swath_data.csv", show_col_types = FALSE)
+
+# View data
+view(rcca_data)
+```
+
+
+**3. Explore dataset**
+
+```{r}
+dim(rcca_data)
+summary(rcca_data)
+```
+
+
+**4. Clean dataset**
+
+```{r filter-seastar}
+seastar <- rcca_data |>
+  filter(str_detect(Classcode, "star")) |>
+  arrange(Year)
+
+seastar
+```
+
+```{r arrange-batstar}
+batstar <- seastar |>
+  filter(Classcode == "bat star") |>
+  arrange(Year)
+
+batstar
+```
+
+```{r select-site1}
+batstar_bw <- batstar |>
+  select(Site, Year, SurveyDate, Classcode, Amount) |>
+  filter(Site == "Breakwater")
+
+batstar_bw
+```
+
+
+```{r summarise-avg1}
+batstar_bwAvg <- batstar_bw |>
+  group_by(Site, Year) |>
+  summarise(AverageAmount = mean(Amount, na.rm = TRUE), .groups = "drop")
+
+# View the summarized data
+batstar_bwAvg
+```
+
+```{r select-site2}
+batstar_mb <- batstar |>
+  select(Site, Year, SurveyDate, Classcode, Amount) |>
+  filter(Site == "MacAbee")
+
+batstar_mb
+```
+
+```{r summarise-avg2}
+batstar_mbAvg <- batstar_mb |>
+  group_by(Site, Year) |>
+  summarise(AverageAmount = mean(Amount, na.rm = TRUE), .groups = "drop")
+
+# View the summarized data
+batstar_mbAvg
+```
+
+```{r}
+batstar_all <- bind_rows(batstar_bwAvg, batstar_mbAvg) |>
+  arrange(Year)
+
+batstar_all
+```
+
+```{r clean-data}
+# Clean data set number 1:
+batstar_bwAvg
+
+# Clean data set number 2:
+batstar_mbAvg
+
+# Clean data set number 1:
+batstar_all
+```
+
+
+```{r save-data}
+# Data set number 1:
+write.csv(batstar_bwAvg, 
+          "~/Documents/STATS_210_Spring_25/Project/project_part2/data-clean/batstar_bwAvg.csv", 
+          row.names = FALSE)
+
+# Data set number 2:
+write.csv(batstar_bwAvg, 
+          "~/Documents/STATS_210_Spring_25/Project/project_part2/data-clean/batstar_mbAvg.csv", 
+          row.names = FALSE)
+
+# Data set number 3:
+write.csv(batstar_bwAvg, 
+          "~/Documents/STATS_210_Spring_25/Project/project_part2/data-clean/batstar_all.csv", 
+          row.names = FALSE)
+```
+
+
+
+
+## Part 2 - Data Visualizations
+
+
+```{r}
+ggplot(bat_star_avg, aes(x = Year, y = AverageAmount)) + 
+  geom_point() + 
+  geom_smooth()
+```
+
+
+
+
