@@ -29,7 +29,7 @@ library(readr)
 
 ```{r load-data}
 # Load in the data
-rcca_data <- read_csv("RCCA_invertebrate_swath_data.csv", show_col_types = FALSE)
+rcca_data <- read_csv("~/Documents/STATS_210_Spring_25/Project/project_part2/data-raw/RCCA_invertebrate_swath_data.csv", show_col_types = FALSE)
 
 # View data
 view(rcca_data)
@@ -63,10 +63,10 @@ batstar
 ```
 
 
-```{r}
+```{r original}
 # Original data saved 
-write.csv(batstar_bwAvg, 
-          "~/Documents/STATS_210_Spring_25/Project/project_part2/batstar.csv", 
+write.csv(batstar, 
+          "~/Documents/STATS_210_Spring_25/Project/project_part2/data-raw/batstar.csv", 
           row.names = FALSE)
 ```
 
